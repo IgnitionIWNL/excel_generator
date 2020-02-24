@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\hmi_checkout",
+    "\\io_checkout",
+    "\\io_checkout\\BKIO",
+    "\\io_checkout\\IFDIO"
+  ],
+  "SelectedNode": "\\io_checkout\\BKIO\\bkio_output.xlsx",
+  "PreviewInSolutionExplorer": false
+}
