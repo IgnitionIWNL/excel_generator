@@ -17,7 +17,8 @@ def main():
     print("1.) Create Sequence checkout checklist")
     print("2.) Create HMI checkout checklist")
     print("3.) Create I/O checkout checklist")
-    print("4.) Exit")
+    print("4.) Create Safety checkout checklist")
+    print("5.) Exit")
 
     sldOption = input("Enter option: ")
 
@@ -27,7 +28,9 @@ def main():
         HMI_Checklist()
     if(sldOption == "3"):
         IO_Checklist()
-    elif(sldOption == "4"):
+    if(sldOption == "4"):
+        Safety_Checklist()
+    elif(sldOption == "5"):
         sys.exit()
 
 def HMICheckout_Part1():
@@ -1765,6 +1768,328 @@ def IO_Checklist():
     generate_ifdio()
     combineBKSheets()
     combineIOSheets()
+
+def Safety_Checklist():
+    os.system('cls')
+    f1Exists = os.path.isfile('./safety_checkout/config.xlsx')
+    if(f1Exists):
+        print("Config file exists...continuing")
+    else:
+        print("Config file(s) missing...returning to main")
+        time.sleep(3)
+        main()
+
+
+    dfConfig = pd.read_excel('./safety_checkout/config.xlsx', sheet_name="Sheet1")
+
+    out_table = []
+    device_list = []
+    autozone_list = []
+
+    print("Generating. Please wait...")
+
+    for index, row in dfConfig.iterrows():
+        autozone = row['autozone']
+
+        #AUTOZONE
+        out_row = {}
+        out_row["device"] = ""
+        out_row["input"] = "Auto Zone " + str(autozone)
+        out_row["initials"] = ""
+        out_row["date"] = ""
+        out_table.append(out_row)
+
+        #HEADER
+        out_row = {}
+        out_row["device"] = "UNIT/DEVICE"
+        out_row["input"] = " "
+        out_row["initials"] = "INITIALS"
+        out_row["date"] = "DATE"
+        out_table.append(out_row)
+
+        for device in row:
+            print(device)
+            if device != "NaN":
+                if "HMI" in str(device):
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b00"
+                    out_row["input"] = "E-STOP PB CHANNEL 1 INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b01"
+                    out_row["input"] = "E-STOP PB CHANNEL 2 INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b02"
+                    out_row["input"] = "SAFETY GATE OK CHANNEL 1 INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b03"
+                    out_row["input"] = "SAFETY GATE OK CHANNEL 2 INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b04"
+                    out_row["input"] = "RESET PB INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b05"
+                    out_row["input"] = "AUTO INITIATE PB INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O3.b00"
+                    out_row["input"] = "AUTO INITIATE PB INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O3.b01"
+                    out_row["input"] = "BLOCKED FLASHING STARVED STEADY LIGHT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O3.b02"
+                    out_row["input"] = "MANUAL FLASHING RUN/STOP STEADY LIGHT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O3.b03"
+                    out_row["input"] = "HORN MODULE"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O3.b06"
+                    out_row["input"] = "SYSTEM RESET PB LIGHT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O3.b07"
+                    out_row["input"] = "AUTO INITIATE PB LIGHT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+                if "SCB" in str(device):
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b00"
+                    out_row["input"] = "SAFETY CONTACTOR 1 OFF"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b01"
+                    out_row["input"] = "SAFETY CONTACTOR 2 OFF"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b02"
+                    out_row["input"] = "SAFETY CONTACTOR 3 OFF"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b03"
+                    out_row["input"] = "SAFETY CONTACTOR 4 OFF"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b04"
+                    out_row["input"] = "E-STOP PB CHANNEL 1 INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b05"
+                    out_row["input"] = "E-STOP PB CHANNEL 2 INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b06"
+                    out_row["input"] = "RESET PB INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_S.I1.b07"
+                    out_row["input"] = "AUTO INITIATE PB INPUT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O2.b00"
+                    out_row["input"] = "POWER CONTACTOR 1 ENABLE"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O2.b01"
+                    out_row["input"] = "POWER CONTACTOR 2 ENABLE"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O2.b02"
+                    out_row["input"] = "POWER CONTACTOR 3 ENABLE"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O2.b03"
+                    out_row["input"] = "POWER CONTACTOR 4 ENABLE"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.I3.b00"
+                    out_row["input"] = "DISCONNECT ON"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.I3.b01"
+                    out_row["input"] = "AS1 POWER 102MCP ON"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.I3.b02"
+                    out_row["input"] = "AS2 POWER 112MCP ON"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O4.b00"
+                    out_row["input"] = "FAULT STACK LT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O4.b01"
+                    out_row["input"] = "READY STACK LT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O4.b03"
+                    out_row["input"] = "E-STOPPED STACK LT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O4.b04"
+                    out_row["input"] = "RESET PB LT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = str(device) + "_P.O4.b05"
+                    out_row["input"] = "START PB LT"
+                    out_row["initials"] = " "
+                    out_row["date"] = " "
+                    out_table.append(out_row)
+                
+
+
+    dfOutput = pd.DataFrame(out_table)
+    dfOutput.to_excel("./safety_checkout/Safety_Checkout.xlsx", header=False, index=False)
+    #print(dfOutput)
+
+    
 
 
 main()
