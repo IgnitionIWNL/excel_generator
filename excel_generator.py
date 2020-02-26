@@ -9,6 +9,7 @@ import glob
 #####===================================#####
 #@TODO: CREATE FUNCTION FOR FILEEXISTS AND PASS FILEPATH AS PARAM
 #@TODO: CREATE FUNCTION FOR IO CHECKOUT THAT INCREMENTS EACH CB BY 3
+#@TODO: CREATE MONGODB TO USE WITH THIS APPLICATION
 
 def main():
     os.system('cls')
@@ -28,149 +29,6 @@ def main():
         IO_Checklist()
     elif(sldOption == "4"):
         sys.exit()
-
-def seqValidationChecklist():
-    fileExists = os.path.isfile('./sequence_checkout/config.xlsx')
-    if(fileExists):
-        print("Config file exist...continuing")
-    else:
-        print("Config file missing...returning to main")
-        time.sleep(3)
-        main()
-
-    dfConfig = pd.read_excel("./sequence_checkout/config.xlsx", sheet_name="Sheet1")
-    #print(dfConfig)
-
-    out_table = []
-    for index, row in dfConfig.iterrows():
-        if dfConfig.isnull().values.any() or row["drive_id"] == "nan" or row["role"] == "nan":
-            print("Detected invalid configuration in `config.xlsx`...please correct and run again")
-            time.sleep(3)
-            main()
-
-        drive_id = row["drive_id"]
-        role = row["role"]
-        #print("Drive ID: " + drive_id + " | " + role)
-
-        if row["role"] == "FOLLOWER":
-            #FOLLOWER 1st row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Rotation"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Test for correct rotation direction"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #FOLLOWER 2nd row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Jog Fwd"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Jog drive forward from HMI"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #FOLLOWER 3rd row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Jog Rev"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Jog drive reverse from HMI"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #FOLLOWER EMPTY row seperator
-            out_row = {}
-            out_row["ifd_number"] = ""
-            out_row["tested_action"] = ""
-            out_row["actuated_by"] = ""
-            out_row["function"] = ""
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-
-        if row["role"] == "LEADER":
-            #LEADER 1st row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Rotation"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Test for correct rotation direction"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #LEADER 2nd row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Jog Fwd"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Jog drive forward from HMI"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #LEADER 3rd row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Jog Rev"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Jog drive reverse from HMI"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #LEADER 4th row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Xfer In Man"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Transfer In in Manual Mode"
-            out_row["date_tested"] = "N/A"
-            out_row["initial"] = "N/A"
-            out_table.append(out_row)
-            #LEADER 5th row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Xfer Out Man"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Transfer Out in Manual Mode"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #LEADER 6th row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Xfer In Auto"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Transfer In in Auto Mode"
-            out_row["date_tested"] = "N/A"
-            out_row["initial"] = "N/A"
-            out_table.append(out_row)
-            #LEADER 7th row
-            out_row = {}
-            out_row["ifd_number"] = drive_id
-            out_row["tested_action"] = "Xfer Out Auto"
-            out_row["actuated_by"] = ""
-            out_row["function"] = "Transfer Out in Auto Mode"
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-            #LEADER EMPTY row seperator
-            out_row = {}
-            out_row["ifd_number"] = ""
-            out_row["tested_action"] = ""
-            out_row["actuated_by"] = ""
-            out_row["function"] = ""
-            out_row["date_tested"] = ""
-            out_row["initial"] = ""
-            out_table.append(out_row)
-
-        
-    dfOutput = pd.DataFrame(out_table)
-    dfOutput.to_excel("./sequence_checkout/Sequence_Checkout.xlsx", header=False, index=False)
-
-    print("Done!")
-    time.sleep(3)
-    main()
 
 def HMICheckout_Part1():
     # //************************ STATIC SECTION ************************//
@@ -1001,31 +859,6 @@ def cleanup():
     time.sleep(3)
     main()
 
-def HMI_Checklist():
-    f1Exists = os.path.isfile('./hmi_checkout/drive_config.xlsx')
-    f2Exists = os.path.isfile('./hmi_checkout/switch_config.xlsx')
-    if(f1Exists and f2Exists):
-        print("Configuration files exzist...continuing")
-        time.sleep(2)
-    else:
-        print("Config file(s) missing...returning to main")
-        time.sleep(3)
-        main()
-    
-    os.system('cls')
-    dfDriveConfig = pd.read_excel("./hmi_checkout/drive_config.xlsx", sheet_name="Sheet1")
-
-    numHMIs = dfDriveConfig["hmi_control"].max()
-
-    for x in range(1, numHMIs+1):
-        if(HMICheckout_Part1()):
-            if(HMICheckout_Part2(x)):
-                if(HMICheckout_Part3()):
-                    if(HMICheckout_Part4()):
-                        CombineHMISheets(x)
-    
-    cleanup()
-
 def generate_pdpio():
     out_table = []
 
@@ -1724,6 +1557,174 @@ def combineIOSheets():
 
     for f in glob.glob("io_checkout/*_output.xlsx"):
         os.remove(f)
+
+def seqValidationChecklist():
+    fileExists = os.path.isfile('./sequence_checkout/config.xlsx')
+    if(fileExists):
+        print("Config file exist...continuing")
+    else:
+        print("Config file missing...returning to main")
+        time.sleep(3)
+        main()
+
+    dfConfig = pd.read_excel("./sequence_checkout/config.xlsx", sheet_name="Sheet1")
+    #print(dfConfig)
+
+    out_table = []
+    for index, row in dfConfig.iterrows():
+        if dfConfig.isnull().values.any() or row["drive_id"] == "nan" or row["role"] == "nan":
+            print("Detected invalid configuration in `config.xlsx`...please correct and run again")
+            time.sleep(3)
+            main()
+
+        drive_id = row["drive_id"]
+        role = row["role"]
+        #print("Drive ID: " + drive_id + " | " + role)
+
+        if row["role"] == "FOLLOWER":
+            #FOLLOWER 1st row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Rotation"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Test for correct rotation direction"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #FOLLOWER 2nd row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Jog Fwd"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Jog drive forward from HMI"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #FOLLOWER 3rd row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Jog Rev"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Jog drive reverse from HMI"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #FOLLOWER EMPTY row seperator
+            out_row = {}
+            out_row["ifd_number"] = ""
+            out_row["tested_action"] = ""
+            out_row["actuated_by"] = ""
+            out_row["function"] = ""
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+
+        if row["role"] == "LEADER":
+            #LEADER 1st row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Rotation"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Test for correct rotation direction"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #LEADER 2nd row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Jog Fwd"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Jog drive forward from HMI"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #LEADER 3rd row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Jog Rev"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Jog drive reverse from HMI"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #LEADER 4th row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Xfer In Man"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Transfer In in Manual Mode"
+            out_row["date_tested"] = "N/A"
+            out_row["initial"] = "N/A"
+            out_table.append(out_row)
+            #LEADER 5th row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Xfer Out Man"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Transfer Out in Manual Mode"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #LEADER 6th row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Xfer In Auto"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Transfer In in Auto Mode"
+            out_row["date_tested"] = "N/A"
+            out_row["initial"] = "N/A"
+            out_table.append(out_row)
+            #LEADER 7th row
+            out_row = {}
+            out_row["ifd_number"] = drive_id
+            out_row["tested_action"] = "Xfer Out Auto"
+            out_row["actuated_by"] = ""
+            out_row["function"] = "Transfer Out in Auto Mode"
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+            #LEADER EMPTY row seperator
+            out_row = {}
+            out_row["ifd_number"] = ""
+            out_row["tested_action"] = ""
+            out_row["actuated_by"] = ""
+            out_row["function"] = ""
+            out_row["date_tested"] = ""
+            out_row["initial"] = ""
+            out_table.append(out_row)
+
+        
+    dfOutput = pd.DataFrame(out_table)
+    dfOutput.to_excel("./sequence_checkout/Sequence_Checkout.xlsx", header=False, index=False)
+
+    print("Done!")
+    time.sleep(3)
+    main()
+
+def HMI_Checklist():
+    f1Exists = os.path.isfile('./hmi_checkout/drive_config.xlsx')
+    f2Exists = os.path.isfile('./hmi_checkout/switch_config.xlsx')
+    if(f1Exists and f2Exists):
+        print("Configuration files exzist...continuing")
+        time.sleep(2)
+    else:
+        print("Config file(s) missing...returning to main")
+        time.sleep(3)
+        main()
+    
+    os.system('cls')
+    dfDriveConfig = pd.read_excel("./hmi_checkout/drive_config.xlsx", sheet_name="Sheet1")
+
+    numHMIs = dfDriveConfig["hmi_control"].max()
+
+    for x in range(1, numHMIs+1):
+        if(HMICheckout_Part1()):
+            if(HMICheckout_Part2(x)):
+                if(HMICheckout_Part3()):
+                    if(HMICheckout_Part4()):
+                        CombineHMISheets(x)
+    
+    cleanup()
 
 def IO_Checklist():
     os.system('cls')
