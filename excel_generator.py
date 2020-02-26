@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import os
 import time
+import glob
 
 #####===================================#####
 #@TODO: CREATE FUNCTION FOR FILEEXISTS AND PASS FILEPATH AS PARAM
@@ -12,8 +13,8 @@ import time
 def main():
     os.system('cls')
     print("Ignition's Lazy Script")
-    print("1.) Create sequence validation checklist from checklist_gen.xlsx")
-    print("2.) Create HMI checkout checklist from config.xlsx")
+    print("1.) Create Sequence checkout checklist")
+    print("2.) Create HMI checkout checklist")
     print("3.) Create I/O checkout checklist")
     print("4.) Exit")
 
@@ -29,7 +30,7 @@ def main():
         sys.exit()
 
 def seqValidationChecklist():
-    fileExists = os.path.isfile('./sequence_checkout/checklist_gen.xlsx')
+    fileExists = os.path.isfile('./sequence_checkout/config.xlsx')
     if(fileExists):
         print("Config file exist...continuing")
     else:
@@ -37,19 +38,19 @@ def seqValidationChecklist():
         time.sleep(3)
         main()
 
-    dfConfig = pd.read_excel("./sequence_checkout/checklist_gen.xlsx", sheet_name="Sheet1")
+    dfConfig = pd.read_excel("./sequence_checkout/config.xlsx", sheet_name="Sheet1")
     #print(dfConfig)
 
     out_table = []
     for index, row in dfConfig.iterrows():
         if dfConfig.isnull().values.any() or row["drive_id"] == "nan" or row["role"] == "nan":
-            print("Detected invalid configuration in `checklist_gen.xlsx`...please correct and run again")
+            print("Detected invalid configuration in `config.xlsx`...please correct and run again")
             time.sleep(3)
             main()
 
         drive_id = row["drive_id"]
         role = row["role"]
-        print("Drive ID: " + drive_id + " | " + role)
+        #print("Drive ID: " + drive_id + " | " + role)
 
         if row["role"] == "FOLLOWER":
             #FOLLOWER 1st row
@@ -88,6 +89,7 @@ def seqValidationChecklist():
             out_row["date_tested"] = ""
             out_row["initial"] = ""
             out_table.append(out_row)
+
         if row["role"] == "LEADER":
             #LEADER 1st row
             out_row = {}
@@ -162,8 +164,13 @@ def seqValidationChecklist():
             out_row["initial"] = ""
             out_table.append(out_row)
 
-            dfOutput = pd.DataFrame(out_table)
-            dfOutput.to_excel("./sequence_checkout/output.xlsx", header=False, index=False)
+        
+    dfOutput = pd.DataFrame(out_table)
+    dfOutput.to_excel("./sequence_checkout/Sequence_Checkout.xlsx", header=False, index=False)
+
+    print("Done!")
+    time.sleep(3)
+    main()
 
 def HMICheckout_Part1():
     # //************************ STATIC SECTION ************************//
@@ -172,7 +179,7 @@ def HMICheckout_Part1():
     #004 SECTION
     out_row = {}
     out_row['action'] = "004 System Overview Help"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = "INT / DATE"
     out_table.append(out_row)
     
     out_row = {}
@@ -203,7 +210,7 @@ def HMICheckout_Part1():
     #005 SECTION
     out_row = {}
     out_row['action'] = "005 Controller Status"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -229,7 +236,7 @@ def HMICheckout_Part1():
     #006 SECTION
     out_row = {}
     out_row['action'] = "006 Line Faults"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -255,7 +262,7 @@ def HMICheckout_Part1():
     #010 SECTION
     out_row = {}
     out_row['action'] = "010 System Overview"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -306,7 +313,7 @@ def HMICheckout_Part1():
     #015 SECTION
     out_row = {}
     out_row['action'] = "015 Group Select AZx"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -357,7 +364,7 @@ def HMICheckout_Part1():
     #025 SECTION
     out_row = {}
     out_row['action'] = "025 Hardwire Status 1 - Process"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -388,7 +395,7 @@ def HMICheckout_Part1():
     #026 SECTION
     out_row = {}
     out_row['action'] = "026 Hardwire Status 2 - Process"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -419,7 +426,7 @@ def HMICheckout_Part1():
     #030 SECTION
     out_row = {}
     out_row['action'] = "030 Hardwire Status 3 - Safety"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -450,7 +457,7 @@ def HMICheckout_Part1():
     #035 SECTION
     out_row = {}
     out_row['action'] = "035 Screen Menu"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -481,7 +488,7 @@ def HMICheckout_Part1():
     #039 SECTION
     out_row = {}
     out_row['action'] = "039 System Cycle Time"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -507,7 +514,7 @@ def HMICheckout_Part1():
     #041 SECTION
     out_row = {}
     out_row['action'] = "041 Production Counts"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -533,7 +540,7 @@ def HMICheckout_Part1():
     #045 SECTION
     out_row = {}
     out_row['action'] = "045 Carrier Counts"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -564,7 +571,7 @@ def HMICheckout_Part1():
     #090 SECTION
     out_row = {}
     out_row['action'] = "090 Drive Status"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -590,7 +597,7 @@ def HMICheckout_Part1():
     #092 SECTION
     out_row = {}
     out_row['action'] = "092 IO Block Diagnostics"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -616,7 +623,7 @@ def HMICheckout_Part1():
     #093 SECTION
     out_row = {}
     out_row['action'] = "093 Safety Block Diagnostics"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -642,7 +649,7 @@ def HMICheckout_Part1():
     #094 SECTION
     out_row = {}
     out_row['action'] = "094 Station Data"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -668,7 +675,7 @@ def HMICheckout_Part1():
     #097 SECTION
     out_row = {}
     out_row['action'] = "097 Interlocks Produced"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -694,7 +701,7 @@ def HMICheckout_Part1():
     #098 SECTION
     out_row = {}
     out_row['action'] = "098 Interlocks Consumed"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -720,7 +727,7 @@ def HMICheckout_Part1():
     #100 SECTION
     out_row = {}
     out_row['action'] = "100 Alarm History"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -842,7 +849,7 @@ def HMICheckout_Part3():
     #500 SECTION
     out_row = {}
     out_row['action'] = "500 Network Node Layout AZx"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -888,7 +895,7 @@ def HMICheckout_Part3():
     #510 SECTION
     out_row = {}
     out_row['action'] = "510 ENet Switch Layout 100"
-    out_row["initial"] = "INT ./ DATE"
+    out_row["initial"] = " "
     out_table.append(out_row)
     
     out_row = {}
@@ -981,7 +988,7 @@ def CombineHMISheets(iterationNumber):
 
     final = pd.concat(combined)
 
-    final.to_excel("./hmi_checkout/HMI" + str(iterationNumber) + ".xlsx", header=False, index=False)
+    final.to_excel("./hmi_checkout/HMI" + str(iterationNumber) + "_Checkout.xlsx", header=False, index=False)
 
 def cleanup():
     print("cleaning up...")
@@ -1421,7 +1428,7 @@ def generate_pdpio():
     out_table.append(out_row)
 
     dfOutput = pd.DataFrame(out_table)
-    dfOutput.to_excel('./io_checkout/pdpio_output.xlsx', header=False, index=False)
+    dfOutput.to_excel('./io_checkout/1_pdpio_output.xlsx', header=False, index=False)
 
 def generate_sbkio(sbkNumber, deviceControl, iterationNumber):
     out_table = []
@@ -1496,25 +1503,27 @@ def generate_sbkio(sbkNumber, deviceControl, iterationNumber):
     out_table.append(out_row)
 
     dfOutput = pd.DataFrame(out_table)
-    dfOutput.to_excel('./io_checkout/sbkio_output.xlsx', header=False, index=False)
+    dfOutput.to_excel('./io_checkout/2_sbkio_output.xlsx', header=False, index=False)
   
-def generate_bkio(iterationNumber):
+def generate_bkio(device_name, device_control, iterationNumber):
     dfConfigDevices = pd.read_excel("./io_checkout/config_devices.xlsx")
 
     out_table = []
-    bk_portlist_leading = [0, 1, 2, 3]
-    bk_portlist_trailing = [8, 9, 10, 11, 12, 13, 14, 15]
+    
+    bk_portlist = [0, 1, 2 , 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
-    x=1
-    for index, row in dfConfigDevices.iterrows():
-        bkNumber = row["device_name"]
-        chbNumber = row["device_control"]
-        for port in bk_portlist_leading:
+    if("CHB" in device_control):
+        #print("Device: " + device_name + " | Device Control: " + device_control)
+        bk_portlist = [0, 1, 2, 3, 8, 9, 10, 11, 12, 13, 14, 15]
+    
+    for port in bk_portlist: 
+        if(port < 10):
             port = str(port).zfill(2)
 
+        if(int(port) <= 3):
             ##BKIO SPARE
             out_row = {}
-            out_row["address"] = bkNumber + ".C.b" + str(port)
+            out_row["address"] = device_name + ".C.b" + str(port)
             out_row["device_no"] = " - "
             out_row["no"] = " - "
             out_row["nc"] = " - "
@@ -1524,71 +1533,67 @@ def generate_bkio(iterationNumber):
             out_row["initial"] = " "
             out_table.append(out_row)
 
-        if("CHB" in str(chbNumber)):
-            print("CHB #: " + str(chbNumber) + " on interal iteration " + str(x) + " | external iteration " + str(iterationNumber))
-            x=x+1
-            #BKIO for CHBs
-            #out_row = {}
-            #out_row["address"] = bkNumber + ".I.b04"
-            #out_row["device_no"] = chbNumber + " PB"
-            #out_row["no"] = " - "
-            #out_row["nc"] = " - "
-            #out_row["actuated_by"] = " "
-            #out_row["function"] = "HOLD RELEASED"
-            #out_row["date_tested"] = " "
-            #out_row["initial"] = " "
-            #out_table.append(out_row)
+    out_row = {}
+    out_row["address"] = device_name + ".I.b04"
+    out_row["device_no"] = device_control + " PB"
+    out_row["no"] = " - "
+    out_row["nc"] = " - "
+    out_row["actuated_by"] = " "
+    out_row["function"] = "HOLD RELEASED"
+    out_row["date_tested"] = " "
+    out_row["initial"] = " "
+    out_table.append(out_row)
 
-            #out_row = {}
-            #out_row["address"] = bkNumber + ".I.b05"
-            #out_row["device_no"] = chbNumber + " PB"
-            #out_row["no"] = " - "
-            #out_row["nc"] = " - "
-            #out_row["actuated_by"] = " "
-            #out_row["function"] = "HOLD PRESSED"
-            #out_row["date_tested"] = " "
-            #out_row["initial"] = " "
-            #out_table.append(out_row)
+    out_row = {}
+    out_row["address"] = device_name + ".I.b05"
+    out_row["device_no"] = device_control + " PB"
+    out_row["no"] = " - "
+    out_row["nc"] = " - "
+    out_row["actuated_by"] = " "
+    out_row["function"] = "HOLD PRESSED"
+    out_row["date_tested"] = " "
+    out_row["initial"] = " "
+    out_table.append(out_row)
 
-            #out_row = {}
-            #out_row["address"] = bkNumber + ".O.b06"
-            #out_row["device_no"] = chbNumber + " SP"
-            #out_row["no"] = " - "
-            #out_row["nc"] = " - "
-            #out_row["actuated_by"] = " "
-            #out_row["function"] = "SPARE OUTPUT"
-            #out_row["date_tested"] = " "
-            #out_row["initial"] = " "
-            #out_table.append(out_row)
+    out_row = {}
+    out_row["address"] = device_name + ".O.b06"
+    out_row["device_no"] = device_control + " SP"
+    out_row["no"] = " - "
+    out_row["nc"] = " - "
+    out_row["actuated_by"] = " "
+    out_row["function"] = "SPARE OUTPUT"
+    out_row["date_tested"] = " "
+    out_row["initial"] = " "
+    out_table.append(out_row)
 
-            #out_row = {}
-            #out_row["address"] = bkNumber + ".O.b07"
-            #out_row["device_no"] = chbNumber + " LT"
-            #out_row["no"] = " - "
-            #out_row["nc"] = " - "
-            #out_row["actuated_by"] = " "
-            #out_row["function"] = "HOLD STACK LIGHT"
-            #out_row["date_tested"] = " "
-            #out_row["initial"] = " "
-            #out_table.append(out_row)
+    out_row = {}
+    out_row["address"] = device_name + ".O.b07"
+    out_row["device_no"] = device_control + " LT"
+    out_row["no"] = " - "
+    out_row["nc"] = " - "
+    out_row["actuated_by"] = " "
+    out_row["function"] = "HOLD STACK LIGHT"
+    out_row["date_tested"] = " "
+    out_row["initial"] = " "
+    out_table.append(out_row)
 
-        for port in bk_portlist_trailing:
-            if(port < 10):
-                port = str(port).zfill(2)
+    for port in bk_portlist:
+        if(port < 10):
+            port = str(port).zfill(2)
 
-            ##BKIO SPARE
-            out_row = {}
-            out_row["address"] = bkNumber + ".C.b" + str(port)
-            out_row["device_no"] = " - "
-            out_row["no"] = " - "
-            out_row["nc"] = " - "
-            out_row["actuated_by"] = " "
-            out_row["function"] = "-"
-            out_row["date_tested"] = " "
-            out_row["initial"] = " "
-            out_table.append(out_row)
-        
-    #EMPTY ROW
+        ##BKIO SPARE
+        out_row = {}
+        out_row["address"] = device_name + ".C.b" + str(port)
+        out_row["device_no"] = " - "
+        out_row["no"] = " - "
+        out_row["nc"] = " - "
+        out_row["actuated_by"] = " "
+        out_row["function"] = "-"
+        out_row["date_tested"] = " "
+        out_row["initial"] = " "
+        out_table.append(out_row)
+
+    ##EMPTY ROW
     out_row = {}
     out_row["address"] = " "
     out_row["device_no"] = " "
@@ -1601,8 +1606,12 @@ def generate_bkio(iterationNumber):
     out_table.append(out_row)
 
     dfOutput = pd.DataFrame(out_table)
-    dfOutput.to_excel('./io_checkout/BKIO/bkio_output.xlsx', header=False, index=False)
-
+    if(os.path.isdir("./io_checkout/BKIO")):
+        dfOutput.to_excel('./io_checkout/BKIO/BK' + str(iterationNumber) + '_output.xlsx', header=False, index=False)
+    else:
+        os.mkdir("./io_checkout/BKIO")
+        dfOutput.to_excel('./io_checkout/BKIO/BK' + str(iterationNumber) + '_output.xlsx', header=False, index=False)
+        
 def generate_ifdio():
 
     dfDriveConfig = pd.read_excel("./io_checkout/config_drives.xlsx")
@@ -1681,12 +1690,40 @@ def generate_ifdio():
         out_table.append(out_row)
 
     dfOutput = pd.DataFrame(out_table)
-    dfOutput.to_excel('./io_checkout/IFDIO/ifdio_output.xlsx', header=False, index=False)
+    dfOutput.to_excel('./io_checkout/4_ifd_output.xlsx', header=False, index=False)
+
+def combineBKSheets():
+    print("Starting combine BK sheets")
+    all_data = [] 
+    
+    for f in glob.glob("io_checkout/BKIO/*.xlsx"):
+        all_data.append(pd.read_excel(f, header=None, index=None))
+
+    df = pd.concat(all_data, ignore_index=True)
+    df.to_excel("./io_checkout/3_bk_output.xlsx", header=False, index=False)
+
+    print("cleaning up...")
+
+    for f in glob.glob("io_checkout/BKIO/*.xlsx"):
+        os.remove(f)
+    
+    os.rmdir("./io_checkout/BKIO")
 
 def combineIOSheets():
-    print("Starting combine sheets")
-
+    os.system('cls')
+    print("Starting combine IO sheets")
+    all_data = []
     
+    for f in glob.glob("io_checkout/*_output.xlsx"):
+        all_data.append(pd.read_excel(f, header=None, index=None))
+
+    df = pd.concat(all_data, ignore_index=True)
+    df.to_excel("./io_checkout/IO_Checkout.xlsx", header=False, index=False)
+
+    print("cleaning up...")
+
+    for f in glob.glob("io_checkout/*_output.xlsx"):
+        os.remove(f)
 
 def IO_Checklist():
     os.system('cls')
@@ -1719,15 +1756,14 @@ def IO_Checklist():
             generate_sbkio(device_name, device_control, x)
             x=x+1
         if(device_type == "BK"):
-            generate_bkio(y)
+            generate_bkio(device_name, device_control, y)
             y=y+1
             
         
 
     generate_ifdio()
-
-
-    #combineIOSheets()
+    combineBKSheets()
+    combineIOSheets()
 
 
 main()
