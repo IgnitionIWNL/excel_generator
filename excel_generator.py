@@ -9,7 +9,8 @@ import glob
 #####===================================#####
 #@TODO: CREATE FUNCTION FOR FILEEXISTS AND PASS FILEPATH AS PARAM
 #@TODO: CREATE FUNCTION FOR IO CHECKOUT THAT INCREMENTS EACH CB BY 3
-#@TODO: CREATE MONGODB TO USE WITH THIS APPLICATION
+#@TODO: CREATE MONGODB TO USE WITH THIS APPLICATION?
+#####===================================#####
 
 def main():
     os.system('cls')
@@ -1546,7 +1547,6 @@ def combineBKSheets():
     os.rmdir("./io_checkout/BKIO")
 
 def combineIOSheets():
-    os.system('cls')
     print("Starting combine IO sheets")
     all_data = []
     
@@ -1808,7 +1808,6 @@ def Safety_Checklist():
         out_table.append(out_row)
 
         for device in row:
-            print(device)
             if device != "NaN":
                 if "HMI" in str(device):
                     #DEVICE
@@ -2086,10 +2085,21 @@ def Safety_Checklist():
 
 
     dfOutput = pd.DataFrame(out_table)
-    dfOutput.to_excel("./safety_checkout/Safety_Checkout.xlsx", header=False, index=False)
-    #print(dfOutput)
+    dfOutput.to_excel("./safety_checkout/Safety_Checkout.xlsx", header=False, index=False)    
+    print("Done...returning to main")
+    time.sleep(3)
+    main()
 
-    
+def SparePartsList():
+    os.system('cls')
+    f1Exists = os.path.isfile('./spare_parts/config.xlsx')
+    if(f1Exists):
+        print("Config file exists...continuing")
+    else:
+        print("Config file(s) missing...returning to main")
+        time.sleep(3)
+        main()
 
+    dfConfig = pd.read_excel('./spare_parts/config.xlsx', sheet_name="Sheet1")
 
 main()

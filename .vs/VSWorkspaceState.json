@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\hmi_checkout",
-    "\\io_checkout",
-    "\\io_checkout\\BKIO",
-    "\\io_checkout\\IFDIO"
+    ""
   ],
-  "SelectedNode": "\\io_checkout\\BKIO\\bkio_output.xlsx",
+  "SelectedNode": "\\excel_generator.py",
   "PreviewInSolutionExplorer": false
 }
