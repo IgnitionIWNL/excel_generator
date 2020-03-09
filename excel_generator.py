@@ -2081,7 +2081,126 @@ def Safety_Checklist():
                     out_row["initials"] = " "
                     out_row["date"] = " "
                     out_table.append(out_row)
-                
+                if "GPB" in str(device):
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row) #@TODO: UPDATE THIS WHEN WE FIGURE OUT WHAT ITS SUPPOSED TO BE
+                if "RPB" in str(device):
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row) #@TODO: UPDATE THIS WHEN WE FIGURE OUT WHAT ITS SUPPOSED TO BE
+                if "EOT" in str(device):
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row)
+
+                    #DEVICE
+                    out_row = {}
+                    out_row["device"] = ""
+                    out_row["input"] = str(device)
+                    out_row["initials"] = ""
+                    out_row["date"] = ""
+                    out_table.append(out_row) #@TODO: UPDATE THIS WHEN WE FIGURE OUT WHAT ITS SUPPOSED TO BE
 
 
     dfOutput = pd.DataFrame(out_table)

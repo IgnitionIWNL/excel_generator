@@ -1,7 +1,10 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\io_checkout",
+    "\\safety_checkout",
+    "\\sequence_checkout"
   ],
-  "SelectedNode": "\\excel_generator.py",
+  "SelectedNode": "\\safety_checkout\\Safety_Checkout.xlsx",
   "PreviewInSolutionExplorer": false
 }
